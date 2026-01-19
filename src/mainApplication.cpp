@@ -1,9 +1,10 @@
-#include "../utils/block.cpp"
+#include "../utils/block/block.cpp"
 
 int main()
 {
     string firstHash = "000000000000000000";
+    string str("Hello World");
+    string str2("Hello World 2");
 
-    Block a(firstHash, "Hello World", 101010);
-    Block b(a.getHash(), "Hello World 2", 202020);
+    Block a(firstHash, str, 101010);
 }

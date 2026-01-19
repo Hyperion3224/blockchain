@@ -1,7 +1,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "picosha2.h"
+#include "../crypto/picosha2.h"
 
 using std::string;
 
