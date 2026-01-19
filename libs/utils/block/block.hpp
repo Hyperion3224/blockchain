@@ -16,6 +16,7 @@ public:
           int _nonce);
 
     std::string computeHash();
+    std::string toString();
 
     std::string getData() const { return data; }
     std::string getPrevHash() const { return prevHash; }
