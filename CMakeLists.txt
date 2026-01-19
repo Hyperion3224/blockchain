@@ -5,6 +5,8 @@ project(Blockchain VERSION 1.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(networking)
-add_subdirectory(src)
-add_subdirectory(utils)
+# add_subdirectory(networking)
+add_subdirectory(libs/utils)
+
+
+add_subdirectory(src/testing)
