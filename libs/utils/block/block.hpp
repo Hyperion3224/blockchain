@@ -6,24 +6,20 @@ class Block{
 private:
     std::string data;
     std::string prevHash;
-    int nonce;
-    int difficultyTarget = 1;
-    std::string difficultyString = "";
-
+    uint nonce;
     std::string hash = "";
-
-    bool Block::isValidHash(std::string hash);
 
 public:
     Block(const std::string& _prevHash,
         const std::string& _data,
-        int _nonce);
+        uint _nonce,
+        const std::string& _hash
+    );
 
-    std::string Block::computeHash();
     std::string toString();
 
     std::string getData() const{ return data; }
     std::string getPrevHash() const{ return prevHash; }
+    uint getNonce() const{ return nonce; }
     std::string getHash() const{ return hash; }
-    int getNonce() const{ return nonce; }
 };
