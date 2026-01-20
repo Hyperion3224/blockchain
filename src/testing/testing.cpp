@@ -4,8 +4,7 @@
 
 using std::string;
 
-int main()
-{
+int main(){
     string firstHash = "000000000000000000";
     string str("Hello World");
     string str2("Hello World 2");
@@ -15,4 +14,5 @@ int main()
 
     std::cout << a.getHash() << std::endl;
     std::cout << b.getHash() << std::endl;
+    std::cout << b.getPrevHash() << std::endl;
 }

@@ -2,24 +2,28 @@
 
 #include <string>
 
-class Block
-{
+class Block{
 private:
     std::string data;
     std::string prevHash;
     int nonce;
+    int difficultyTarget = 1;
+    std::string difficultyString = "";
+
     std::string hash = "";
 
-public:
-    Block(const std::string &_prevHash,
-          const std::string &_data,
-          int _nonce);
+    bool Block::isValidHash(std::string hash);
 
-    std::string computeHash();
+public:
+    Block(const std::string& _prevHash,
+        const std::string& _data,
+        int _nonce);
+
+    std::string Block::computeHash();
     std::string toString();
 
-    std::string getData() const { return data; }
-    std::string getPrevHash() const { return prevHash; }
-    std::string getHash() const { return hash; }
-    int getNonce() const { return nonce; }
+    std::string getData() const{ return data; }
+    std::string getPrevHash() const{ return prevHash; }
+    std::string getHash() const{ return hash; }
+    int getNonce() const{ return nonce; }
 };
