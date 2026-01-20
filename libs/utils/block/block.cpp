@@ -9,5 +9,5 @@ Block::Block(const std::string& _prevHash,
 }
 
 std::string Block::toString(){
-    return "data: " + data + ", nonce: " + std::to_string(nonce) + ", prevHash: " + prevHash + ", hash: " + hash;
+    return "data: " + data + ",\nnonce: " + std::to_string(nonce) + ",\nprevHash: " + prevHash + ",\nhash: " + hash;
 }
