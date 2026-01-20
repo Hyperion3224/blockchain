@@ -1,8 +1,0 @@
-
-
-class BlockChain {
-    private:
-        
-    public:
-
-}

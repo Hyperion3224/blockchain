@@ -20,7 +20,7 @@ BlockBuilder& BlockBuilder::mineHash() {
 }
 
 std::string BlockBuilder::computeHash(){
-    if (data.size() + prevHash.size() + sizeof(nonce) >= 1048576){
+    if (data.size() + prevHash.size() + sizeof(nonce) >= MAX_BLOCK_SIZE){
         throw std::invalid_argument("Sizes of block elements is too large to hash");
     }
 

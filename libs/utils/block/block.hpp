@@ -2,6 +2,8 @@
 
 #include <string>
 
+#define MAX_BLOCK_SIZE 1048576
+
 class Block{
 private:
     std::string data;

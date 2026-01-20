@@ -1,7 +1,7 @@
 add_library(utilities
     block/block.cpp
     block/blockbuilder.cpp
-    chain/chain.cpp
+    ledger/ledgerio.cpp
 )
 
 target_include_directories(utilities
@@ -9,4 +9,5 @@ target_include_directories(utilities
         crypto/
     PUBLIC
         block/
+        ledger/
 )

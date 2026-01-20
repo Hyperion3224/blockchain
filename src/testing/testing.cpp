@@ -1,5 +1,6 @@
 #include "block.hpp"
 #include "blockbuilder.hpp"
+#include "ledgerio.hpp"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -12,22 +13,16 @@ int main(){
     blockchain.push_back(
         BlockBuilder()
             .addPrevHash(std::string(64, '0'))
-            .addData("Hello World")
+            .addData(std::string(30, 'x'))
             .addDifficultyTarget(2)
             .mineHash()
             .build()
     );
 
-    for(int i = 1; i < 50; i++){
-        blockchain.push_back(
-            BlockBuilder()
-                .addPrevHash(blockchain.back().getHash())
-                .addData("Hello World" + std::to_string(i))
-                .addDifficultyTarget(2)
-                .mineHash()
-                .build()
-        );
-    }
+    LedgerIO ledger("IOTest.txt");
+
+    ledger.write("test");
+    std::cout << ledger.read();
 
     for (Block b: blockchain){
         std::cout << b.toString() << std::endl;
