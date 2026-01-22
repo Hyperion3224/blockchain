@@ -19,7 +19,18 @@ int main(){
             .build()
     );
 
-    LedgerIO ledger("IOTest.txt");
+    for(int i = 1; i < 5; i++){
+        blockchain.push_back(
+            BlockBuilder()
+                .addPrevHash(blockchain.back().getHash())
+                .addData("Hello World" + std::to_string(i))
+                .addDifficultyTarget(2)
+                .mineHash()
+                .build()
+        );
+    }
+
+    LedgerIO ledger("BlockchainLedger.dat");
 
     ledger.write("test");
     std::cout << ledger.read();

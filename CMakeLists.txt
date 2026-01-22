@@ -8,5 +8,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # add_subdirectory(networking)
 add_subdirectory(libs/utils)
 
-
 add_subdirectory(src/testing)
+
+add_executable(test test.cpp)
