@@ -3,7 +3,7 @@
 
 Block::Block(const std::string& _prevHash,
     const std::string& _data,
-    uint _nonce,
+    size_t _nonce,
     const std::string& _hash)
     : data(_data), prevHash(_prevHash), nonce(_nonce), hash(_hash){
 }

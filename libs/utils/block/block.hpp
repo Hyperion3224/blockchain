@@ -8,13 +8,13 @@ class Block{
 private:
     std::string data;
     std::string prevHash;
-    uint nonce;
+    size_t nonce;
     std::string hash = "";
 
 public:
     Block(const std::string& _prevHash,
         const std::string& _data,
-        uint _nonce,
+        size_t _nonce,
         const std::string& _hash
     );
 
@@ -22,6 +22,6 @@ public:
 
     std::string getData() const{ return data; }
     std::string getPrevHash() const{ return prevHash; }
-    uint getNonce() const{ return nonce; }
+    size_t getNonce() const{ return nonce; }
     std::string getHash() const{ return hash; }
 };

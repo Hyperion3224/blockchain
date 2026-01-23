@@ -6,7 +6,7 @@ class BlockBuilder{
 private:
     std::string data = "";
     std::string prevHash = "";
-    uint nonce = 0;
+    size_t nonce = 0;
     int difficultyTarget = 1;
     std::string difficultyString = "";
 
