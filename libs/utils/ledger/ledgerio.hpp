@@ -4,14 +4,21 @@
 #include <string>
 #include <filesystem>
 
+#define MAX_MB_DATA_SIZE 5
+#define BLOCK_FOLDER "testing_blocks"
+#define DAT_FILE_TITLE "BlockchainBLK"
+
 class LedgerIO{
     private:
-        std::filesystem::path filename;
+        std::filesystem::path activeFilePath;
         std::filesystem::path dirPath;
+
+        std::filesystem::path getLastDat();
+        int getNumFromBlock(std::filesystem::path path);
         
     public:
-        LedgerIO(std::string _filename);
+        LedgerIO();
 
-        void write(std::string buffer);
-        std::string read();
+        void writeBlock(std::string buffer);
+        std::string readTop();
 };

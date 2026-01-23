@@ -30,10 +30,9 @@ int main(){
         );
     }
 
-    LedgerIO ledger("BlockchainLedger.dat");
+    LedgerIO ledger;
 
-    ledger.write("test");
-    std::cout << ledger.read();
+    ledger.writeBlock("T");
 
     for (Block b: blockchain){
         std::cout << b.toString() << std::endl;
