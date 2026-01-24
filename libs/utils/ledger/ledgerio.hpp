@@ -4,7 +4,7 @@
 #include <string>
 #include <filesystem>
 
-#define MAX_MB_DATA_SIZE 5
+#define MAX_MB_DATA_SIZE 128000000
 #define BLOCK_FOLDER "testing_blocks"
 #define DAT_FILE_TITLE "BlockchainBLK"
 

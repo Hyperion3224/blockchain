@@ -9,11 +9,12 @@ using std::string;
 
 int main(){
     std::vector<Block> blockchain;
+    LedgerIO ledger;
 
     blockchain.push_back(
         BlockBuilder()
             .addPrevHash(std::string(64, '0'))
-            .addData(std::string(30, 'x'))
+            .addData(std::string("This is the data recorded within my block"))
             .addDifficultyTarget(2)
             .mineHash()
             .build()
@@ -30,11 +31,8 @@ int main(){
         );
     }
 
-    LedgerIO ledger;
-
-    ledger.writeBlock("T");
-
+    
     for (Block b: blockchain){
-        std::cout << b.toString() << std::endl;
+        ledger.writeBlock(b.dton());
     }
 }

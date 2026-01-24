@@ -38,7 +38,7 @@ void LedgerIO::writeBlock(std::string buffer){
     if (!fs::exists(fullPath)){
         //if the block path doesnt exist then it will create it and init the first file
         fs::create_directories(fullPath);
-        std::ofstream tempInitBlockDat(fullPath / DAT_FILE_TITLE);
+        std::ofstream tempInitBlockDat(fullPath / (std::string(DAT_FILE_TITLE) + "0"));
         tempInitBlockDat.close();
     }
     else if (fs::file_size(fullToFile) + buffer.size() > MAX_MB_DATA_SIZE){
@@ -70,16 +70,14 @@ fs::path LedgerIO::getLastDat(){
     if (!fs::exists(fullPath)){
         //if the block path doesnt exist then it will create it and init the first file
         fs::create_directories(fullPath);
-        std::ofstream tempInitBlockDat(fullPath / DAT_FILE_TITLE);
-        tempInitBlockDat.close();
     }
-    if (fs::is_empty(dirPath / BLOCK_FOLDER)){
+    if (fs::is_empty(fullPath)){
         std::string newFilename = std::string(DAT_FILE_TITLE) + "0";
-        std::ofstream tempInitBlockDat((dirPath / BLOCK_FOLDER / newFilename).string());
+        std::ofstream tempInitBlockDat((fullPath / newFilename).string());
         tempInitBlockDat.close();
     }
 
-    for (auto& entry : fs::directory_iterator(dirPath / BLOCK_FOLDER)){
+    for (auto& entry : fs::directory_iterator(fullPath)){
         int number = getNumFromBlock(entry.path());
         if (fs::is_regular_file(entry.status())){
             if (number >= lastDatNum){

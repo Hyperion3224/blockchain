@@ -1,4 +1,6 @@
 #include <string>
+#include <cstdint>
+#include <bit>
 #include <cstdlib>
 #include <iostream>
 #include <filesystem>
@@ -10,7 +12,8 @@ void print(auto buffer){
 }
 
 int main(){
-    fs::path p(std::getenv("HOME"));
-    p /= "CryptoCur";
-    print(p);
+    uint32_t num = 0x1; 
+    std::string s = std::bit_cast<std::string>(num);
+
+    print(s);
 }
