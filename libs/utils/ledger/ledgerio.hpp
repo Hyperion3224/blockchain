@@ -9,16 +9,16 @@
 #define DAT_FILE_TITLE "BlockchainBLK"
 
 class LedgerIO{
-    private:
-        std::filesystem::path activeFilePath;
-        std::filesystem::path dirPath;
+private:
+    std::filesystem::path activeFilePath;
+    std::filesystem::path dirPath;
 
-        std::filesystem::path getLastDat();
-        int getNumFromBlock(std::filesystem::path path);
-        
-    public:
-        LedgerIO();
+    std::filesystem::path getLastDat();
+    int getNumFromBlock(std::filesystem::path path);
 
-        void writeBlock(std::string buffer);
-        std::string readTop();
+public:
+    LedgerIO();
+
+    void writeBlock(std::vector<uint8_t> buffer);
+    std::string readTop();
 };

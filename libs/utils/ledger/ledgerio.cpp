@@ -26,7 +26,7 @@ LedgerIO::LedgerIO(){
     activeFilePath = getLastDat();
 };
 
-void LedgerIO::writeBlock(std::string buffer){
+void LedgerIO::writeBlock(std::vector<uint8_t> buffer){
     const fs::path fullPath = dirPath / BLOCK_FOLDER;
     const fs::path fullToFile = fullPath / activeFilePath;
 
@@ -51,7 +51,16 @@ void LedgerIO::writeBlock(std::string buffer){
         activeFilePath = fullPath / newActiveFilename;
         std::cout << "new dat file created:: " << newActiveFilename;
     }
-    std::ofstream(activeFilePath, std::ios::app) << buffer;
+
+    std::ofstream file(activeFilePath, std::ios::app);
+    if (file.is_open()){
+        for (uint8_t byte : buffer){
+            file << byte;
+        }
+    }
+    else{
+        std::cerr << "Error opening file: " << activeFilePath;
+    }
 }
 
 std::string LedgerIO::readTop(){

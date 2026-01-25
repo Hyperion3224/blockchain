@@ -2,10 +2,12 @@
 
 #include <string>
 #include <cstdint>
+#include <vector>
 
 #define MAX_BLOCK_SIZE 1048576
 
 using std::uint32_t;
+using std::uint8_t;
 
 class Block{
 private:
@@ -22,8 +24,8 @@ public:
     );
 
     std::string toString();
-    std::string dton();
-    std::string ntod();
+    std::vector<uint8_t> dton();
+    Block ntod(std::vector<uint8_t> buffer);
 
     std::string getData() const{ return data; }
     std::string getPrevHash() const{ return prevHash; }

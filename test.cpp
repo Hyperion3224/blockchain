@@ -1,3 +1,4 @@
+#include <vector>
 #include <string>
 #include <cstdint>
 #include <bit>
@@ -12,8 +13,12 @@ void print(auto buffer){
 }
 
 int main(){
-    uint32_t num = 0x1; 
-    std::string s = std::bit_cast<std::string>(num);
+    uint32_t num = 0xFFFFFFFF;
+    std::string str("hello");
+
+    std::string s(reinterpret_cast<char*>(&num), sizeof(num));
 
     print(s);
+
+
 }

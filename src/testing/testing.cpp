@@ -13,26 +13,27 @@ int main(){
 
     blockchain.push_back(
         BlockBuilder()
-            .addPrevHash(std::string(64, '0'))
-            .addData(std::string("This is the data recorded within my block"))
+        .addPrevHash(std::string(64, '0'))
+        .addData(std::string("This is the data recorded within my block"))
+        .addDifficultyTarget(2)
+        .mineHash()
+        .build()
+    );
+
+    for (int i = 1; i < 5; i++){
+        blockchain.push_back(
+            BlockBuilder()
+            .addPrevHash(blockchain.back().getHash())
+            .addData("Hello World" + std::to_string(i))
             .addDifficultyTarget(2)
             .mineHash()
             .build()
-    );
-
-    for(int i = 1; i < 5; i++){
-        blockchain.push_back(
-            BlockBuilder()
-                .addPrevHash(blockchain.back().getHash())
-                .addData("Hello World" + std::to_string(i))
-                .addDifficultyTarget(2)
-                .mineHash()
-                .build()
         );
     }
 
-    
-    for (Block b: blockchain){
+
+    for (Block b : blockchain){
+        std::cout << b.toString();
         ledger.writeBlock(b.dton());
     }
 }
