@@ -33,7 +33,6 @@ int main(){
 
 
     for (Block b : blockchain){
-        std::cout << b.toString();
         ledger.writeBlock(b.dton());
     }
 }

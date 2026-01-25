@@ -1,5 +1,7 @@
 #include "ledgerio.hpp"
+
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <stdexcept>
 #include <cstring>
@@ -37,19 +39,10 @@ void LedgerIO::writeBlock(std::vector<uint8_t> buffer){
 
     if (!fs::exists(fullPath)){
         //if the block path doesnt exist then it will create it and init the first file
-        fs::create_directories(fullPath);
-        std::ofstream tempInitBlockDat(fullPath / (std::string(DAT_FILE_TITLE) + "0"));
-        tempInitBlockDat.close();
+        initBlockFile(fullPath, 0x0);
     }
     else if (fs::file_size(fullToFile) + buffer.size() > MAX_MB_DATA_SIZE){
-        std::string newActiveFilename(
-            DAT_FILE_TITLE +
-            std::to_string(getNumFromBlock(activeFilePath) + 1)
-        );
-        std::ofstream openNewBlockDat(fullPath / newActiveFilename);
-        openNewBlockDat.close();
-        activeFilePath = fullPath / newActiveFilename;
-        std::cout << "new dat file created:: " << newActiveFilename;
+        initBlockFile(fullPath, getNumFromBlock(activeFilePath) + 1);
     }
 
     std::ofstream file(activeFilePath, std::ios::app);
@@ -77,13 +70,12 @@ fs::path LedgerIO::getLastDat(){
     fullPath /= BLOCK_FOLDER;
 
     if (!fs::exists(fullPath)){
-        //if the block path doesnt exist then it will create it and init the first file
         fs::create_directories(fullPath);
     }
+
     if (fs::is_empty(fullPath)){
-        std::string newFilename = std::string(DAT_FILE_TITLE) + "0";
-        std::ofstream tempInitBlockDat((fullPath / newFilename).string());
-        tempInitBlockDat.close();
+        //if the block path doesnt exist then it will create it and init the first file
+        initBlockFile(fullPath, 0x0);
     }
 
     for (auto& entry : fs::directory_iterator(fullPath)){
@@ -96,12 +88,20 @@ fs::path LedgerIO::getLastDat(){
         }
     }
 
-    return lastDat;
+    return lastDat.replace_extension(BLOCK_FILE_EXT);
 }
 
 int LedgerIO::getNumFromBlock(fs::path path){
     std::string stem = path.stem().string();
-    std::string numberPart = stem.substr(std::strlen(DAT_FILE_TITLE));
+    std::string numberPart = stem.substr(std::strlen(BLOCK_FILE_TITLE));
 
     return std::stoi(numberPart);
+}
+
+
+void LedgerIO::initBlockFile(std::filesystem::path path, uint32_t num){
+    std::string newFilename = std::string(BLOCK_FILE_TITLE) + std::to_string(num);
+    activeFilePath = path / (newFilename + BLOCK_FILE_EXT);
+    std::ofstream tempInitBlockDat((path / newFilename).string() + BLOCK_FILE_EXT);
+    tempInitBlockDat.close();
 }

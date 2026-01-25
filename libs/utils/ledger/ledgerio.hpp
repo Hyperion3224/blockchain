@@ -1,12 +1,14 @@
 #pragma once
 
-#include <bits/stdc++.h>
 #include <string>
 #include <filesystem>
+#include <vector>
+#include <cstdint>
 
 #define MAX_MB_DATA_SIZE 128000000
 #define BLOCK_FOLDER "testing_blocks"
-#define DAT_FILE_TITLE "BlockchainBLK"
+#define BLOCK_FILE_TITLE "BlockchainBLK"
+#define BLOCK_FILE_EXT ".dat"
 
 class LedgerIO{
 private:
@@ -15,6 +17,7 @@ private:
 
     std::filesystem::path getLastDat();
     int getNumFromBlock(std::filesystem::path path);
+    void initBlockFile(std::filesystem::path path, uint32_t num);
 
 public:
     LedgerIO();
