@@ -9,6 +9,8 @@
 #define BLOCK_FOLDER "testing_blocks"
 #define BLOCK_FILE_TITLE "BlockchainBLK"
 #define BLOCK_FILE_EXT ".dat"
+#define MAGIC_FORMAT 0x4A640204
+#define MAGIC_VERSION  0x01
 
 class LedgerIO{
 private:

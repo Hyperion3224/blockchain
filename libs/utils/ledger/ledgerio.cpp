@@ -30,10 +30,9 @@ LedgerIO::LedgerIO(){
 
 void LedgerIO::writeBlock(std::vector<uint8_t> buffer){
     const fs::path fullPath = dirPath / BLOCK_FOLDER;
-    const fs::path fullToFile = fullPath / activeFilePath;
 
     if (buffer.size() > MAX_MB_DATA_SIZE){
-        std::cerr << "Failed to write buffer was too large";
+        std::cerr << "Failed to write buffer was too large" << std::endl;
         return;
     }
 
@@ -41,18 +40,16 @@ void LedgerIO::writeBlock(std::vector<uint8_t> buffer){
         //if the block path doesnt exist then it will create it and init the first file
         initBlockFile(fullPath, 0x0);
     }
-    else if (fs::file_size(fullToFile) + buffer.size() > MAX_MB_DATA_SIZE){
+    else if (fs::file_size(activeFilePath) + buffer.size() > MAX_MB_DATA_SIZE){
         initBlockFile(fullPath, getNumFromBlock(activeFilePath) + 1);
     }
 
-    std::ofstream file(activeFilePath, std::ios::app);
+    std::ofstream file(activeFilePath, std::ios::binary | std::ios::app);
     if (file.is_open()){
-        for (uint8_t byte : buffer){
-            file << byte;
-        }
+        file.write(reinterpret_cast<char*>(buffer.data()), buffer.size());
     }
     else{
-        std::cerr << "Error opening file: " << activeFilePath;
+        std::cerr << "Error opening file: " << activeFilePath << std::endl;
     }
 }
 
@@ -102,6 +99,20 @@ int LedgerIO::getNumFromBlock(fs::path path){
 void LedgerIO::initBlockFile(std::filesystem::path path, uint32_t num){
     std::string newFilename = std::string(BLOCK_FILE_TITLE) + std::to_string(num);
     activeFilePath = path / (newFilename + BLOCK_FILE_EXT);
-    std::ofstream tempInitBlockDat((path / newFilename).string() + BLOCK_FILE_EXT);
-    tempInitBlockDat.close();
+
+    std::ofstream tempInitBlockDat(activeFilePath, std::ios::binary);
+
+    //write magic filetype and version number;
+    if (tempInitBlockDat.is_open()){
+        uint32_t fmt = MAGIC_FORMAT;
+        uint8_t fmv = MAGIC_VERSION;
+        tempInitBlockDat.write(reinterpret_cast<const char*>(&fmt), sizeof(fmt));
+        tempInitBlockDat.write(reinterpret_cast<const char*>(&fmv), 1);
+        tempInitBlockDat.close();
+        std::cout << "Created new file: " << activeFilePath << std::endl;
+    }
+    else{
+        std::cerr << "Error opening file: " << activeFilePath << std::endl;
+    }
+
 }
