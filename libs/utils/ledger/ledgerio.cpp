@@ -62,7 +62,6 @@ std::vector<Block> LedgerIO::readActiveFile(){
 
     if (file.is_open()){
         std::vector<Block> blocks;
-        BlockBuilder bb;
 
         char mfn[4];
         file.read(mfn, 4);
@@ -70,6 +69,8 @@ std::vector<Block> LedgerIO::readActiveFile(){
         file.read(&mfv, 1);
 
         for (int i = 0; i < 5; i++){
+            BlockBuilder bb;
+
             // 1. Helper for Nonce
             uint32_t nonce;
             std::vector<uint8_t> uintBuffer(4);
@@ -102,7 +103,9 @@ std::vector<Block> LedgerIO::readActiveFile(){
 
             if (tempBlock.getNonce() != nonce ||
                 tempBlock.getHash() != hash){
-                std::cerr << "FAKE DATA DETECTED: " << hash << std::endl;
+                std::cerr << "FAKE DATA DETECTED: " << std::endl <<
+                    hash << " :: " << tempBlock.getHash() << std::endl <<
+                    nonce << " :: " << tempBlock.getNonce() << std::endl;
             }
             else{
                 blocks.push_back(tempBlock);

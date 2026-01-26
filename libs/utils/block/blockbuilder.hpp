@@ -6,7 +6,7 @@ class BlockBuilder{
 private:
     std::string data = "";
     std::string prevHash = "";
-    size_t nonce = 0;
+    uint32_t nonce = 0;
     int difficultyTarget = 1;
     std::string difficultyString = "";
 
@@ -24,6 +24,7 @@ public:
         return *this;
     };
 
+    BlockBuilder& propose();
     BlockBuilder& mineHash();
     Block build();
 };
