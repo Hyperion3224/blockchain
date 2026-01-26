@@ -1,4 +1,7 @@
 #include "ledgerio.hpp"
+#include "serialize.hpp"
+#include "deserialize.hpp"
+#include "blockbuilder.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -46,6 +49,7 @@ void LedgerIO::writeBlock(std::vector<uint8_t> buffer){
 
     std::ofstream file(activeFilePath, std::ios::binary | std::ios::app);
     if (file.is_open()){
+        // 1/26/2026 12:39 AM order: Nonce Hash pHash Data
         file.write(reinterpret_cast<char*>(buffer.data()), buffer.size());
     }
     else{
@@ -53,10 +57,60 @@ void LedgerIO::writeBlock(std::vector<uint8_t> buffer){
     }
 }
 
-std::string LedgerIO::readTop(){
-    std::string buffer;
-    std::ifstream(activeFilePath) >> buffer;
-    return buffer;
+std::vector<Block> LedgerIO::readActiveFile(){
+    std::ifstream file(activeFilePath, std::ios::binary); // Open in binary mode!
+
+    if (file.is_open()){
+        std::vector<Block> blocks;
+        BlockBuilder bb;
+
+        char mfn[4];
+        file.read(mfn, 4);
+        char mfv;
+        file.read(&mfv, 1);
+
+        for (int i = 0; i < 5; i++){
+            // 1. Helper for Nonce
+            uint32_t nonce;
+            std::vector<uint8_t> uintBuffer(4);
+            file.read(reinterpret_cast<char*>(uintBuffer.data()), 4);
+            nonce = deserializeUInt32(uintBuffer);
+
+            // 2. Lambda to simplify String reading
+            auto readString = [&](std::ifstream& f) -> std::string{
+                std::vector<uint8_t> lenBuf(4);
+                f.read(reinterpret_cast<char*>(lenBuf.data()), 4);
+                uint32_t len = deserializeUInt32(lenBuf);
+
+                // Prepare a buffer that contains [Length(4) + Data(len)] 
+                // to satisfy your deserializeString() requirements
+                std::vector<uint8_t> fullBuf = lenBuf;
+                fullBuf.resize(4 + len);
+                f.read(reinterpret_cast<char*>(fullBuf.data() + 4), len);
+                return deserializeString(fullBuf);
+                };
+
+            std::string hash = readString(file);
+            std::string prevHash = readString(file);
+            std::string data = readString(file);
+
+            Block tempBlock = bb.addData(data)
+                .addDifficultyTarget(2)
+                .addPrevHash(prevHash)
+                .mineHash()
+                .build();
+
+            if (tempBlock.getNonce() != nonce ||
+                tempBlock.getHash() != hash){
+                std::cerr << "FAKE DATA DETECTED: " << hash << std::endl;
+            }
+            else{
+                blocks.push_back(tempBlock);
+            }
+        }
+        return blocks;
+    }
+    return {};
 }
 
 fs::path LedgerIO::getLastDat(){
@@ -104,15 +158,23 @@ void LedgerIO::initBlockFile(std::filesystem::path path, uint32_t num){
 
     //write magic filetype and version number;
     if (tempInitBlockDat.is_open()){
-        uint32_t fmt = MAGIC_FORMAT;
+        std::vector<uint8_t> fmtBuff;
         uint8_t fmv = MAGIC_VERSION;
-        tempInitBlockDat.write(reinterpret_cast<const char*>(&fmt), sizeof(fmt));
+        serializeUInt32(fmtBuff, MAGIC_FORMAT);
+        tempInitBlockDat.write(reinterpret_cast<const char*>(fmtBuff.data()), fmtBuff.size());
         tempInitBlockDat.write(reinterpret_cast<const char*>(&fmv), 1);
         tempInitBlockDat.close();
-        std::cout << "Created new file: " << activeFilePath << std::endl;
+
+        if (tempInitBlockDat){
+            std::cout << "Created new file: " << activeFilePath << std::endl;
+        }
+        else{
+            std::cerr << "Write failed to: " << activeFilePath << std::endl;
+        }
     }
     else{
         std::cerr << "Error opening file: " << activeFilePath << std::endl;
     }
+
 
 }

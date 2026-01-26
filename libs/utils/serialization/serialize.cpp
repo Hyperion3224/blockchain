@@ -16,10 +16,3 @@ void serializeUInt32(std::vector<uint8_t>& outBuffer, uint32_t num){
     outBuffer.push_back(num & 0xFF);
 }
 
-uint8_t deserializeUInt32(std::vector<uint8_t>& inBuffer){
-    //inBuffer.front();
-}
-
-std::string deserializeString(std::vector<uint8_t>& inBuffer, uint32_t size){
-
-}

@@ -3,13 +3,14 @@ add_library(utilities
     block/blockbuilder.cpp
     ledger/ledgerio.cpp
     serialization/serialize.cpp
+    serialization/deserialize.cpp
 )
 
 target_include_directories(utilities
     PRIVATE
         crypto/
-        serialization/
     PUBLIC
+        serialization/
         block/
         ledger/
 )

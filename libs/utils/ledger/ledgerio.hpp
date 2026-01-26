@@ -5,12 +5,18 @@
 #include <vector>
 #include <cstdint>
 
+#include "block.hpp"
+
 #define MAX_MB_DATA_SIZE 128000000
+
 #define BLOCK_FOLDER "testing_blocks"
 #define BLOCK_FILE_TITLE "BlockchainBLK"
 #define BLOCK_FILE_EXT ".dat"
-#define MAGIC_FORMAT 0x4A640204
+
+#define MAGIC_FORMAT 0x4A443234
 #define MAGIC_VERSION  0x01
+
+#define PACKING_FORMAT 0x0
 
 class LedgerIO{
 private:
@@ -25,5 +31,5 @@ public:
     LedgerIO();
 
     void writeBlock(std::vector<uint8_t> buffer);
-    std::string readTop();
+    std::vector<Block> readActiveFile();
 };

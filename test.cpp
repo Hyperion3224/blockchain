@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <filesystem>
+#include "serialize.hpp"
+#include "deserialize.hpp"
 
 namespace fs = std::filesystem;
 
@@ -13,12 +15,13 @@ void print(auto buffer){
 }
 
 int main(){
-    uint32_t num = 0xFFFFFFFF;
-    std::string str("hello");
+    std::string str("Hello World");
+    std::string str2;
 
-    std::string s(reinterpret_cast<char*>(&num), sizeof(num));
+    std::vector<uint8_t> buffer;
 
-    print(s);
+    serializeString(buffer, str);
+    str2 = deserializeString(buffer);
 
-
+    print(str2);
 }
