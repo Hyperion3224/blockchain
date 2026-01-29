@@ -63,10 +63,23 @@ std::vector<Block> LedgerIO::readActiveFile(){
     if (file.is_open()){
         std::vector<Block> blocks;
 
-        char mfn[4];
-        file.read(mfn, 4);
-        char mfv;
-        file.read(&mfv, 1);
+        uint32_t magic;
+        std::vector<uint8_t> buffer;
+        buffer.resize(sizeof(magic));
+        file.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
+        magic = deserializeUInt32(buffer);
+
+        uint8_t version;
+        file.read(reinterpret_cast<char*>(&version), sizeof(version));
+
+        if (magic != MAGIC_FORMAT){
+            std::cerr << "Error: incorrect magic for file: " << activeFilePath << std::endl;
+            return blocks;
+        }
+        if (version != MAGIC_VERSION){
+            std::cerr << "Error: incorrect version for file: " << activeFilePath << std::endl;
+            return blocks;
+        }
 
         for (int i = 0; i < 5; i++){
             BlockBuilder bb;

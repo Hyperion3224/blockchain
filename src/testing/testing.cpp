@@ -1,6 +1,7 @@
 #include "block.hpp"
 #include "blockbuilder.hpp"
 #include "ledgerio.hpp"
+#include "chainverifier.hpp"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -9,7 +10,7 @@ using std::string;
 
 int main(){
     std::vector<Block> blockchain;
-    LedgerIO ledger;
+    LedgerIO ledgerIO;
 
     blockchain.push_back(
         BlockBuilder()
@@ -24,7 +25,7 @@ int main(){
         blockchain.push_back(
             BlockBuilder()
             .addPrevHash(blockchain.back().getHash())
-            .addData("Hello World" + std::to_string(i))
+            .addData("This is the data recorded inside of block " + std::to_string(i))
             .addDifficultyTarget(2)
             .mineHash()
             .build()
@@ -33,14 +34,12 @@ int main(){
 
 
     for (Block b : blockchain){
-        ledger.writeBlock(b.dton());
+        ledgerIO.writeBlock(b.dton());
     }
 
-    blockchain = ledger.readActiveFile();
+    blockchain = ledgerIO.readActiveFile();
 
-    for (Block b : blockchain){
-        std::cout << b.toString() << std::endl;
-    }
+    std::cout << isValidBlockChain(blockchain) << std::endl;
 
     return 0;
 }
