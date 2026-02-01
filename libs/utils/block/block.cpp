@@ -7,6 +7,11 @@ Block::Block(const std::string& _prevHash,
     uint32_t _nonce,
     const std::string& _hash)
     : data(_data), prevHash(_prevHash), nonce(_nonce), hash(_hash){
+
+    size += data.length() +
+        hash.length() +
+        prevHash.length() +
+        sizeof(uint32_t);
 }
 
 std::string Block::toString(){
@@ -26,4 +31,12 @@ std::vector<uint8_t> Block::dton(){
 
 Block ntod(std::vector<uint8_t> buffer){
 
+}
+
+bool Block::isValidBlock(){
+    if (size > MAX_BLOCK_SIZE ||
+        hash.length() != HASH_SIZE ||
+        prevHash.length() != HASH_SIZE){
+        return false;
+    }
 }
